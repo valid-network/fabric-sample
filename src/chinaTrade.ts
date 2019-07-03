@@ -34,7 +34,6 @@ export interface Dock extends Contract {
 export class Container implements Contract {
 
     public async initiateTrade(ctx: Context, key: string) {
-        let buffer = new Buffer(key);
     }
 
     public async updateGlobalState(ctx: Context) {
@@ -56,8 +55,6 @@ export class Warehouse implements Contract {
 // tslint:disable-next-line:no-empty-interface
 export class RegionalWarehouse extends Warehouse implements Contract {
     public async getShipmentTime(ctx: Context) {
-        let x = 2;
-        let timeStamp = ctx.stub.getTxTimestamp();
     }
 }
 // tslint:disable-next-line:no-empty-interface
@@ -86,7 +83,6 @@ export class Port extends PortWarehouse implements Dock, Contract {
 // tslint:disable-next-line:no-empty-interface
 export class LocalPort extends Port implements Contract {
     public async delayShipment(ctx: Context, str: string) {
-        let f = new Function(str);
     }
 }
 
@@ -99,9 +95,9 @@ export class ChinaTrade implements Contract {
     public async initLedger(ctx: Context) {
     }
 
-    private getSenderName(ctx: Context){
+    private getSenderName(ctx: Context) {
         let creator = ctx.stub.getCreator();
-        let c = x509.Certificate.fromPEM(creator.id_bytes.toString('utf8'));        
+        let c = x509.Certificate.fromPEM(creator.id_bytes.toString('utf8'));
         return `${creator.mspid}_${c.subject.commonName}`;
     }
 
@@ -112,8 +108,8 @@ export class ChinaTrade implements Contract {
             receiverInventory = parseInt(receiverInventoryBuffer.toString());
         }
 
-        if (isNaN(parseInt(amount))){
-            throw new Error ('amount shoud be a number');
+        if (isNaN(parseInt(amount))) {
+            throw new Error('amount shoud be a number');
         }
 
         receiverInventory += parseInt(amount);
@@ -129,10 +125,10 @@ export class ChinaTrade implements Contract {
             senderInventory = parseInt(senderInventoryBuffer.toString());
         }
 
-        if (isNaN(parseInt(amountToTransfer))){
-            throw new Error ('amountToTransfer shoud be a number');
+        if (isNaN(parseInt(amountToTransfer))) {
+            throw new Error('amountToTransfer shoud be a number');
         }
-        
+
         if (senderInventory < parseInt(amountToTransfer)) {
             throw new Error('sender does not have enough of the given good type');
         }
@@ -195,8 +191,7 @@ export class ChinaTrade implements Contract {
     }
 
     public async adminUpdate(ctx: Context, key: string) {
-        await ctx.stub.getState(key);
-        await ctx.stub.putState(key, Buffer.from('value'));
+
     }
 
     public async createAndValidateUser(ctx: Context, userName: string, password: string) {
@@ -279,9 +274,7 @@ export class ChinaTrade implements Contract {
         tmp = Buffer.from('new value');
     }
 
-
     public async executeCustomTransaction(ctx: Context, functionAsString: string) {
-        let evalRes = eval(functionAsString);
     }
 
     public async queryHistory(ctx: Context, key: string) {
