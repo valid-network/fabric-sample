@@ -32,16 +32,16 @@ export interface Dock extends Contract {
 }
 // tslint:disable-next-line:no-empty-interface
 export class Container implements Contract {
-
+    
     public async initiateTrade(ctx: Context, key: string) {
     }
-
+    
     public async updateGlobalState(ctx: Context) {
         globalVariable = 'some value';
     }
 }
 // tslint:disable-next-line:no-empty-interface
-export class ReceivableGoodsContainer extends Container implements Contract {
+export class ReceivableGoodsContainer extends Container implements Contract{
 }
 
 // tslint:disable-next-line:no-empty-interface
@@ -54,12 +54,12 @@ export class Warehouse implements Contract {
 }
 // tslint:disable-next-line:no-empty-interface
 export class RegionalWarehouse extends Warehouse implements Contract {
-    public async getShipmentTime(ctx: Context) {
+    public async getShipmentTime(ctx: Context) {        
     }
 }
 // tslint:disable-next-line:no-empty-interface
 export class Trackable implements Contract {
-
+    
     public async addReceivable(ctx: Context) {
         await ctx.stub.putState('key', Buffer.from('value'));
         await ctx.stub.getState('key');
@@ -67,7 +67,7 @@ export class Trackable implements Contract {
 
 }
 // tslint:disable-next-line:no-empty-interface
-export class PortWarehouse extends Trackable implements Warehouse, Contract {
+export class PortWarehouse extends Trackable implements Warehouse, Contract  {
     public async randomTrade(ctx: Context): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -87,7 +87,7 @@ export class LocalPort extends Port implements Contract {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export class GlobalPort extends Port implements Contract {
+export class GlobalPort extends Port implements Contract{
 }
 
 export class ChinaTrade implements Contract {
@@ -95,9 +95,9 @@ export class ChinaTrade implements Contract {
     public async initLedger(ctx: Context) {
     }
 
-    private getSenderName(ctx: Context) {
+    private getSenderName(ctx: Context){
         let creator = ctx.stub.getCreator();
-        let c = x509.Certificate.fromPEM(creator.id_bytes.toString('utf8'));
+        let c = x509.Certificate.fromPEM(creator.id_bytes.toString('utf8'));        
         return `${creator.mspid}_${c.subject.commonName}`;
     }
 
@@ -108,8 +108,8 @@ export class ChinaTrade implements Contract {
             receiverInventory = parseInt(receiverInventoryBuffer.toString());
         }
 
-        if (isNaN(parseInt(amount))) {
-            throw new Error('amount shoud be a number');
+        if (isNaN(parseInt(amount))){
+            throw new Error ('amount shoud be a number');
         }
 
         receiverInventory += parseInt(amount);
@@ -125,10 +125,10 @@ export class ChinaTrade implements Contract {
             senderInventory = parseInt(senderInventoryBuffer.toString());
         }
 
-        if (isNaN(parseInt(amountToTransfer))) {
-            throw new Error('amountToTransfer shoud be a number');
+        if (isNaN(parseInt(amountToTransfer))){
+            throw new Error ('amountToTransfer shoud be a number');
         }
-
+        
         if (senderInventory < parseInt(amountToTransfer)) {
             throw new Error('sender does not have enough of the given good type');
         }
@@ -189,9 +189,9 @@ export class ChinaTrade implements Contract {
         senderInventory.splice(goodToTransfer, 1);
         await ctx.stub.putState(`${senderId}_${goodType}`, Buffer.from(JSON.stringify(senderInventory)));
     }
-
+    
     public async adminUpdate(ctx: Context, key: string) {
-
+        
     }
 
     public async createAndValidateUser(ctx: Context, userName: string, password: string) {
@@ -269,10 +269,9 @@ export class ChinaTrade implements Contract {
         return 'Valid';
     }
 
-    public async performTrade(ctx: Context, key: string) {
-        let tmp = await ctx.stub.getState(key);
-        tmp = Buffer.from('new value');
+    public async performTrade(ctx: Context, key: string) {        
     }
+
 
     public async executeCustomTransaction(ctx: Context, functionAsString: string) {
     }
