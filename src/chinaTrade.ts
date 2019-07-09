@@ -34,7 +34,7 @@ export interface Dock extends Contract {
 export class Container implements Contract {
     
     public async initiateTrade(ctx: Context, key: string) {
-    
+    }
     
     public async updateGlobalState(ctx: Context) {
         globalVariable = 'some value';
@@ -60,6 +60,12 @@ export class RegionalWarehouse extends Warehouse implements Contract {
 // tslint:disable-next-line:no-empty-interface
 export class Trackable implements Contract {
     
+    public async addReceivable(ctx: Context) {
+        await ctx.stub.putState('key', Buffer.from('value'));
+        await ctx.stub.getState('key');
+    }
+
+}
 // tslint:disable-next-line:no-empty-interface
 export class PortWarehouse extends Trackable implements Warehouse, Contract  {
     public async randomTrade(ctx: Context): Promise<void> {
@@ -183,7 +189,7 @@ export class ChinaTrade implements Contract {
         senderInventory.splice(goodToTransfer, 1);
         await ctx.stub.putState(`${senderId}_${goodType}`, Buffer.from(JSON.stringify(senderInventory)));
     }
-    
+
     public async adminUpdate(ctx: Context, key: string) {
         
     }
@@ -275,3 +281,6 @@ export class ChinaTrade implements Contract {
         await ctx.stub.getPrivateDataQueryResult(key, query);
     }
 
+
+
+}
