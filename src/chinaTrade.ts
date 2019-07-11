@@ -37,7 +37,6 @@ export class Container implements Contract {
     }
     
     public async updateGlobalState(ctx: Context) {
-        globalVariable = 'some value';
     }
 }
 // tslint:disable-next-line:no-empty-interface
@@ -47,9 +46,8 @@ export class ReceivableGoodsContainer extends Container implements Contract{
 // tslint:disable-next-line:no-empty-interface
 export class Warehouse implements Contract {
     public async randomTrade(ctx: Context) {
-        let a = Math.random();
         let b = 3;
-        let c = a + b;
+        let c = 3 + b;
     }
 }
 // tslint:disable-next-line:no-empty-interface
