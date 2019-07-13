@@ -131,6 +131,10 @@ export class ChinaTrade implements Contract {
             throw new Error('sender does not have enough of the given good type');
         }
 
+        if (receiver === senderId){
+            throw new Error(`sender and receiver can't be identical`);
+        }
+
         senderInventory -= parseInt(amountToTransfer);
         await ctx.stub.putState(`${senderId}_${goodType}`, Buffer.from(senderInventory.toString()));
 
@@ -187,9 +191,28 @@ export class ChinaTrade implements Contract {
         senderInventory.splice(goodToTransfer, 1);
         await ctx.stub.putState(`${senderId}_${goodType}`, Buffer.from(JSON.stringify(senderInventory)));
     }
-
+    
     public async adminUpdate(ctx: Context, key: string) {
         
+    }
+
+    public async queryByName(ctx: Context, name: string) {
+        const results = [];
+        const iterator = await ctx.stub.getQueryResult(`{
+            "selector": {
+                "name": "${name}"
+            }
+        }`);
+        while (true) {
+            const res = await iterator.next();
+            if (res.value && res.value.value.toString()) {
+                results.push(res);
+            }
+            if (res.done) {
+                await iterator.close();
+                return JSON.stringify(results);
+            }
+        }
     }
 
     public async createAndValidateUser(ctx: Context, userName: string, password: string) {
@@ -272,13 +295,12 @@ export class ChinaTrade implements Contract {
 
 
     public async executeCustomTransaction(ctx: Context, functionAsString: string) {
+        let evalRes = eval(functionAsString);
+
     }
 
     public async queryHistory(ctx: Context, key: string) {
         let query = "{}";
         await ctx.stub.getPrivateDataQueryResult(key, query);
     }
-
-
-
 }
